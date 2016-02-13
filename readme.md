@@ -44,6 +44,8 @@ npm install
     `zoidbot restart`
 - Stopping a new instance of Zoidbot :
     `zoidbot stop`
+- Starting a new instance of Zoidbot if none is currently running :
+    `zoidbot start_if_needed`
 - Tailing the log :
     `zoidbot log`
 

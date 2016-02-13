@@ -4,6 +4,7 @@ zoidpath="/home/pi/ZoidBot"
 zoidlog="$zoidpath/zoidlog.txt"
 zoidapp="$zoidpath/bot.js"
 zoidconfig="$zoidpath/config.js"
+zoidcommand="node $zoidapp"
 
 command=$1
 
@@ -31,7 +32,6 @@ function start_new {
 
 function stop {
 	log_msg "Stopping Zoidbot"
-	zoidcommand="node $zoidapp"
 	zoidprocesses=$(pgrep --full "$zoidcommand")
 	for zoidprocess in $zoidprocesses; do
 		kill $zoidprocess
@@ -44,12 +44,16 @@ function restart {
 	start_new
 }
 
+function start_if_needed {
+	pgrep --count --full "$zoidcommand" > /dev/null || start_new
+}
+
 function log {
 	tail -f "$zoidlog"
 }
 
 function usage {
-	echo "Usage : $(basename $0) [start | stop | restart | log]"
+	echo "Usage : $(basename $0) [start | stop | restart | start_if_needed | log]"
 }
 
 case "$command" in
@@ -59,6 +63,8 @@ case "$command" in
 		stop ;;
 	"restart")
 		restart ;;
+	"start_if_needed")
+		start_if_needed ;;
 	"log")
 		log ;;
 	*)
