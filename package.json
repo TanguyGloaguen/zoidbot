@@ -1,0 +1,18 @@
+{
+  "name": "zoidbot",
+  "version": "0.0.1",
+  "description": "A bot for Slack built with Botkit",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RemiEven/zoidbot.git"
+  },
+  "author": "Remi Even",
+  "license": "MIT",
+  "dependencies": {
+    "botkit": "0.0.5"
+  }
+}

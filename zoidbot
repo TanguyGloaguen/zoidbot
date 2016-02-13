@@ -1,0 +1,66 @@
+#!/bin/bash
+
+zoidpath="/home/pi/ZoidBot"
+zoidlog="$zoidpath/zoidlog.txt"
+zoidapp="$zoidpath/bot.js"
+zoidconfig="$zoidpath/config.js"
+
+command=$1
+
+touch $zoidlog
+
+function log_msg {
+	date +"%x %X" | tr -d "\n">> $zoidlog
+	echo " $1" >> $zoidlog
+}
+
+function create_config_file_if_needed {
+	if [[ ! -f $zoidconfig ]]; then
+		log_msg "Creating new configuration file from default"
+		cp "$zoidconfig".default "$zoidconfig"
+	fi
+}
+
+function start_new {
+	create_config_file_if_needed
+	log_msg "Starting Zoidbot"
+	node $zoidapp &>> $zoidlog &
+	log_msg "Zoidbot started"
+	pgrep "bot.js"
+}
+
+function stop {
+	log_msg "Stopping Zoidbot"
+	zoidcommand="node $zoidapp"
+	zoidprocesses=$(pgrep --full "$zoidcommand")
+	for zoidprocess in $zoidprocesses; do
+		kill $zoidprocess
+		log_msg "Stopped Zoidbot (pid : $zoidprocess)"
+	done
+}
+
+function restart {
+	stop
+	start_new
+}
+
+function log {
+	tail -f "$zoidlog"
+}
+
+function usage {
+	echo "Usage : $(basename $0) [start | stop | restart | log]"
+}
+
+case "$command" in
+	"start")
+		start_new ;;
+	"stop")
+		stop ;;
+	"restart")
+		restart ;;
+	"log")
+		log ;;
+	*)
+		usage ;;
+esac

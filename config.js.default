@@ -1,0 +1,3 @@
+module.exports = {
+	token: "[ Write your token here ]"
+};
